@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+# [wouter] custom files
+2020/practice/wouter/.qmake.stash
+2020/practice/wouter/Makefile
+2020/practice/wouter/solution_a_example.in.txt
