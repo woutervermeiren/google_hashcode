@@ -3,14 +3,19 @@
 
 #include <vector>
 #include <string>
+#include "Defines.h"
 
 class Algorithm {
 public:
 	Algorithm() {}
     virtual ~Algorithm() {}
 
-    void run(const unsigned int numberOfSlices, std::vector<unsigned int>& slicesCount, std::vector<unsigned int>& typesOfPizzaToOrder, unsigned int& totalNumberOfOrderedSlices);
+    void run(const uInt numberOfSlices, uIntVector& slicesCount, uIntVector& typesOfPizzaToOrder, uInt& totalNumberOfOrderedSlices);
 
+    void run2(const uInt numberOfSlices, uIntVector& slicesCount, uIntVector& typesOfPizzaToOrder, uInt& totalNumberOfOrderedSlices);
+
+protected:
+    void runRecursion(int index, uInt numberOfSlices, uIntVector& slicesCount, uIntVector& currentOrder, uInt& currentNumberSlices, uIntVector& bestOrder, uInt& bestNumberSlices);
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include "../lib/Algorithm.h"
+#include <iostream>
 
-void Algorithm::run(const unsigned int numberOfSlices, std::vector<unsigned int>& slicesCount, std::vector<unsigned int>& typesOfPizzaToOrder, unsigned int& totalNumberOfOrderedSlices) {
+void Algorithm::run(const uInt numberOfSlices, uIntVector& slicesCount, uIntVector& typesOfPizzaToOrder, uInt& totalNumberOfOrderedSlices) {
 
 	// Number of slices in pizzas is in non-decreasing order.
 	typesOfPizzaToOrder.reserve(slicesCount.size());
@@ -37,4 +38,50 @@ void Algorithm::run(const unsigned int numberOfSlices, std::vector<unsigned int>
 
 	totalNumberOfOrderedSlices = bestScore;
 	sort(typesOfPizzaToOrder.begin(), typesOfPizzaToOrder.end());
+}
+
+void Algorithm::run2(const uInt numberOfSlices, uIntVector& slicesCount, uIntVector& typesOfPizzaToOrder, uInt& totalNumberOfOrderedSlices) {
+	typesOfPizzaToOrder.reserve(slicesCount.size());
+	uIntVector currentOrder;
+	currentOrder.reserve(slicesCount.size());
+	uInt currentNumberSlices = 0;
+
+	runRecursion(slicesCount.size() - 1, numberOfSlices, slicesCount, currentOrder, currentNumberSlices, typesOfPizzaToOrder, totalNumberOfOrderedSlices);
+
+	sort(typesOfPizzaToOrder.begin(), typesOfPizzaToOrder.end());
+}
+
+void Algorithm::runRecursion(int index, uInt numberOfSlices, uIntVector& slicesCount, uIntVector& currentOrder, uInt& currentNumberSlices, uIntVector& bestOrder, uInt& bestNumberSlices) {
+	if (bestNumberSlices == numberOfSlices) {
+		return;
+	}
+
+	if (index >= 0) {
+		uInt slicesCurrentIndex = slicesCount[index];
+		uInt totalWithCurrentIndex = slicesCurrentIndex + currentNumberSlices;
+		if (totalWithCurrentIndex > numberOfSlices) {
+			return runRecursion(index - 1, numberOfSlices, slicesCount, currentOrder, currentNumberSlices, bestOrder, bestNumberSlices);
+		}
+		else {
+			// Further recursion with slices added/not added
+			currentOrder.push_back(index);
+			currentNumberSlices = totalWithCurrentIndex;
+			if (currentNumberSlices > bestNumberSlices) {
+				bestOrder = currentOrder;
+				bestNumberSlices = currentNumberSlices;
+			}
+
+			runRecursion(index - 1, numberOfSlices, slicesCount, currentOrder, currentNumberSlices, bestOrder, bestNumberSlices);
+
+			if (bestNumberSlices == numberOfSlices) {
+				return;
+			}
+
+			// Again remove slice
+			currentOrder.pop_back();
+			currentNumberSlices -= slicesCurrentIndex;
+
+			runRecursion(index - 1, numberOfSlices, slicesCount, currentOrder, currentNumberSlices, bestOrder, bestNumberSlices);
+		}
+	}
 }
