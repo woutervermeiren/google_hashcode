@@ -12,3 +12,12 @@ Library::Library(uInt _id, uInt _numBooks, uInt _time, uInt _shippable)
 {
     bookIds.reserve(N);
 }
+
+bool sortbysec(const std::pair<unsigned int,unsigned int> &a,  const std::pair<unsigned int,unsigned int> &b)
+{
+    return (a.second > b.second);
+}
+
+void Library::sort() {
+	std::sort(bookIds.begin(), bookIds.end(), sortbysec);
+}

@@ -66,21 +66,21 @@ Library* Algorithm::get_next_library(std::vector<Library *> &libraries, uInt day
 }
 
 void Algorithm::calculate_book_scores(std::vector<Library *> &libraries, uIntVector &book_scores) {
-    for (int i = 0; i != libraries.size(); ++i) {
+    /*for (int i = 0; i != libraries.size(); ++i) {
         this->m_threadpool.push([&](int library_idx) {
             Library &lib = *libraries[library_idx];
             metric = lib.N * lib.M / lib.T;
 
             // Calculate book score
             const auto sum_of_book_scores = std::accumulate(lib.bookIds.begin(), lib.bookIds.end(), 0, [&](auto acc, auto book_idx) {
-                return acc + book_scores[book_idx];
+                return acc + book_scores[book_idx].first;
             });
 
             lib.book_score = sum_of_book_scores;
         });
     }
 
-    this->m_threadpool.stop(true);
+    this->m_threadpool.stop(true);*/
 }
 
 void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& bookScores, uIntVector& librariesToSignUp) {
@@ -129,7 +129,7 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 				if (nextBookIndex >= lib->bookIds.size()) { // Library finished
 					continue;
 				}
-				uInt bookId = lib->bookIds[nextBookIndex];
+				uInt bookId = lib->bookIds[nextBookIndex].first;
 
 				++lastUsedBookIndex[id];
 

@@ -50,8 +50,9 @@ bool FileHandler::parseInputFile(std::string fileName, uInt& B, uInt& L, uInt& D
 		for (uInt j = 0; j < nbBooks; ++j) {
 		   	uInt val = 0;
 			iss >> val;
-			library->bookIds.push_back(val);
+			library->bookIds.push_back(std::pair<unsigned int, unsigned int>(val, bookScores[val]));
 		}
+		library->sort();
     }
 
 	return true;
