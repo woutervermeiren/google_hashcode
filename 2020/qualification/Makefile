@@ -1,6 +1,6 @@
 IDIR=lib
 CC=g++
-CFLAGS=-I$(IDIR) -O3
+CFLAGS=-I$(IDIR) -O3 -std=c++14
 $(info $(CFLAGS))
 
 ODIR=src
