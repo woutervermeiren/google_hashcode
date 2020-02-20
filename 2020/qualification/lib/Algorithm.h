@@ -14,7 +14,7 @@ public:
 
     void run(std::vector<Library *> &libraries);
 
-    uInt metric
+    uInt metric;
 };
 
 #endif
