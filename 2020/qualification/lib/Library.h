@@ -7,7 +7,7 @@
 
 class Library {
 public:
-	Library(uInt _id, uInt _numBooks, uInt _time, uInt _shippable);
+	Library(uInt _id, uInt _numBooks, uInt _time, uInt _shippable, uInt _nbBooksToScan);
     virtual ~Library() {}
 
     uInt id;
@@ -17,6 +17,9 @@ public:
     uInt booksShippablePerDay;
 
     uIntVector bookIds;
+
+    uInt numberOfBooksToScan;
+    uIntVector bookIdsToScan;
 };
 
 #endif

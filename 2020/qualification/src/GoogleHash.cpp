@@ -42,6 +42,7 @@ int main()
 		std::cout << "<<<<< Start algorithm execution >>>>>" << std::endl;
 		begin = std::chrono::steady_clock::now();
 
+		uIntVector librariesToSignUp;
 		algorithm.run();
 
 		end = std::chrono::steady_clock::now();
@@ -50,7 +51,7 @@ int main()
 		std::cout << "<<<<< Writing output file  >>>>>" << std::endl;
 		begin = std::chrono::steady_clock::now();
 		std::string outFileName = currentFileName + ".out";
-		handler.writeOutputFile(outFileName);
+		handler.writeOutputFile(outFileName, librariesToSignUp, libraries);
 		end = std::chrono::steady_clock::now();
 		std::cout << "Output file creation took " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " us" << std::endl << std::endl;
 
