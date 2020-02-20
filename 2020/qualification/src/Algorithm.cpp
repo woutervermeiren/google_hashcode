@@ -7,29 +7,17 @@ using namespace std::chrono_literals;
 
 void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores, uInt D)
 {
-    uIntVector library_results(libraries.size());
-
-    for (int i = 0; i != libraries.size(); ++i) {
-        this->m_threadpool.push([&](int library_idx) {
-            Library &lib = *libraries[library_idx];
-            metric = lib.N * lib.M / lib.T;
-
-            // Calculate book score
-            const auto sum_of_book_scores = std::accumulate(lib.bookIds.begin(), lib.bookIds.end(), 0, [&](auto acc, auto book_idx) {
-                return acc + book_scores[book_idx];
-            });
-
-            library_results[library_idx] = sum_of_book_scores;
-        });
-    }
-
-    this->m_threadpool.stop(true);
-
     library_count = libraries.size();
 
+    // now step through days
     while(today < D && library_count != 0) {
+        uIntVector library_results(libraries.size());
+        calculate_book_scores(library_results, libraries, book_scores);
+
+        // select next library that can start sending books
+        Library* lib = nullptr;
         if(days_till_signup_done == 0) {
-            Library* lib = get_next_library(libraries, D - today);
+            lib = get_next_library(libraries, D - today);
             days_till_signup_done = lib->M;
         }
 
@@ -73,4 +61,22 @@ Library* Algorithm::get_next_library(std::vector<Library *> &libraries, uInt day
     }
 
     return libraries[index];
+}
+
+void Algorithm::calculate_book_scores(uIntVector & library_results, std::vector<Library *> &libraries, uIntVector &book_scores) {
+    for (int i = 0; i != libraries.size(); ++i) {
+        this->m_threadpool.push([&](int library_idx) {
+            Library &lib = *libraries[library_idx];
+            metric = lib.N * lib.M / lib.T;
+
+            // Calculate book score
+            const auto sum_of_book_scores = std::accumulate(lib.bookIds.begin(), lib.bookIds.end(), 0, [&](auto acc, auto book_idx) {
+                return acc + book_scores[book_idx];
+            });
+
+            library_results[library_idx] = sum_of_book_scores;
+        });
+    }
+
+    this->m_threadpool.stop(true);
 }
