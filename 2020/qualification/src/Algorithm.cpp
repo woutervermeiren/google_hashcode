@@ -5,7 +5,7 @@
 #include <chrono>
 using namespace std::chrono_literals;
 
-void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores)
+void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores, uInt D)
 {
     uIntVector library_results(libraries.size());
 

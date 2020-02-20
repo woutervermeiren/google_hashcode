@@ -13,7 +13,7 @@ public:
     Algorithm() : metric(0), today(0), days_till_signup_done(0), library_count(0) {}
     virtual ~Algorithm() {}
 
-    void run(std::vector<Library *> &libraries, uIntVector &book_scores);
+    void run(std::vector<Library *> &libraries, uIntVector &book_scores, uInt D);
 
     uInt metric;
     ctpl::thread_pool m_threadpool;
