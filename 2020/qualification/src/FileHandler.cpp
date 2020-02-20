@@ -64,11 +64,12 @@ bool FileHandler::writeOutputFile(std::string fileName, uIntVector& librariesToS
 
 	for (uInt i = 0; i < librariesToSignUp.size(); ++i) {
 		uInt id = librariesToSignUp[i];
-		outFile << id << libraries[id]->bookIdsToScan.size() << "\n";
+		outFile << id << " " << libraries[id]->bookIdsToScan.size() << "\n";
 
 		for (uInt j = 0; j < libraries[id]->bookIdsToScan.size(); ++j) {
-			outFile << libraries[id]->bookIdsToScan[j];
+			outFile << libraries[id]->bookIdsToScan[j] << " ";
 		}
+		outFile << "\n";
 	}
 
 	return true;

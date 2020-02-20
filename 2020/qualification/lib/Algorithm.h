@@ -15,6 +15,10 @@ public:
 
     void run(std::vector<Library *> &libraries, uIntVector &book_scores, uInt D);
 
+    void run2(uInt D, std::vector<Library *> &libraries, uIntVector& bookScores, uIntVector& librariesToSignUp);
+
+    Library* getNextLibrary(std::vector<Library *>& librariesTmp);
+
     uInt metric;
     ctpl::thread_pool m_threadpool;
 
