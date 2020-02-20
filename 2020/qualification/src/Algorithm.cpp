@@ -23,9 +23,6 @@ void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores)
         });
     }
 
-    while (this->m_threadpool.n_idle() != 0) {
-
-        std::this_thread::sleep_for(1s);
-    }
+    this->m_threadpool.stop(true);
 
 }
