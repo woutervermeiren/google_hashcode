@@ -27,6 +27,8 @@ bool FileHandler::parseInputFile(std::string fileName, uInt& B, uInt& L, uInt& D
     	bookScores.push_back(val);
     }
 
+    libraries.reserve(L);
+
     for (uInt i = 0; i < L; ++i) {
         std::getline(input, line);
         iss.clear();
