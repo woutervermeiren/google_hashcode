@@ -5,6 +5,7 @@
 #include "Library.h"
 #include <string>
 #include <vector>
+#include "threadpool.h"
 
 class Algorithm
 {
@@ -15,6 +16,7 @@ public:
     void run(std::vector<Library *> &libraries);
 
     uInt metric;
+    ctpl::thread_pool m_threadpool;
 };
 
 #endif
