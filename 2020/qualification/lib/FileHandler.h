@@ -13,7 +13,7 @@ public:
 
     bool parseInputFile(std::string fileName, uInt& B, uInt& L, uInt& D, uIntVector& bookScores, std::vector<Library*>& libraries);
 
-    bool writeOutputFile(std::string fileName, uIntVector& librariesToSignUp, std::vector<Library*>& libraries);
+    bool writeOutputFile(std::string fileName, uIntVector& librariesToSignUp, std::vector<Library*>& libraries, uIntVector& bookScores);
 };
 
 #endif

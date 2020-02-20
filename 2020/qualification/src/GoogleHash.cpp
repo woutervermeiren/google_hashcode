@@ -10,11 +10,11 @@ using namespace std;
 int main()
 {
     stringVector fileNames;
-    /*fileNames.push_back("a_example.txt");
+    fileNames.push_back("a_example.txt");
     fileNames.push_back("b_read_on.txt");
     fileNames.push_back("c_incunabula.txt");
     fileNames.push_back("d_tough_choices.txt");
-    fileNames.push_back("e_so_many_books.txt");*/
+    fileNames.push_back("e_so_many_books.txt");
     fileNames.push_back("f_libraries_of_the_world.txt");
 
     FileHandler handler;
@@ -55,7 +55,7 @@ int main()
         std::cout << "<<<<< Writing output file  >>>>>" << std::endl;
         begin = std::chrono::steady_clock::now();
         std::string outFileName = currentFileName + ".out";
-        handler.writeOutputFile(outFileName, librariesToSignUp, libraries);
+        handler.writeOutputFile(outFileName, librariesToSignUp, libraries, bookScores);
         end = std::chrono::steady_clock::now();
         std::cout << "Output file creation took "
                   << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " us" << std::endl

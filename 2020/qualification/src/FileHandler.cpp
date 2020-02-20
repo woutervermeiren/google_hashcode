@@ -58,7 +58,7 @@ bool FileHandler::parseInputFile(std::string fileName, uInt& B, uInt& L, uInt& D
 	return true;
 }
 
-bool FileHandler::writeOutputFile(std::string fileName, uIntVector& librariesToSignUp, std::vector<Library*>& libraries) {
+bool FileHandler::writeOutputFile(std::string fileName, uIntVector& librariesToSignUp, std::vector<Library*>& libraries, uIntVector& bookScores) {
 	std::ofstream outFile;
 	outFile.open(fileName);
 
@@ -73,6 +73,8 @@ bool FileHandler::writeOutputFile(std::string fileName, uIntVector& librariesToS
 
 	outFile << librariesToSignUp.size() - nbWithoutBooks << "\n";
 
+
+	uInt totalScore = 0;
 	for (uInt i = 0; i < librariesToSignUp.size(); ++i) {
 		uInt id = librariesToSignUp[i];
 		if (libraries[id]->bookIdsToScan.size() == 0) {
@@ -82,9 +84,11 @@ bool FileHandler::writeOutputFile(std::string fileName, uIntVector& librariesToS
 
 		for (uInt j = 0; j < libraries[id]->bookIdsToScan.size(); ++j) {
 			outFile << libraries[id]->bookIdsToScan[j] << " ";
+			totalScore += bookScores[libraries[id]->bookIdsToScan[j]];
 		}
 		outFile << "\n";
 	}
+	std::cout << "Total score = " << totalScore << std::endl;
 
 	return true;
 }
