@@ -45,6 +45,8 @@ int main()
         uIntVector librariesToSignUp;
         algorithm.run(libraries);
 
+        algorithm.run2(D, libraries, bookScores, librariesToSignUp);
+
         end = std::chrono::steady_clock::now();
         std::cout << "Algorithm execution took "
                   << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " us" << std::endl;
@@ -53,15 +55,6 @@ int main()
         begin = std::chrono::steady_clock::now();
         std::string outFileName = currentFileName + ".out";
         handler.writeOutputFile(outFileName, librariesToSignUp, libraries);
-        end = std::chrono::steady_clock::now();
-        std::cout << "Output file creation took "
-                  << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " us" << std::endl
-                  << std::endl;
-
-        std::cout << "<<<<< Writing output file  >>>>>" << std::endl;
-        begin = std::chrono::steady_clock::now();
-        std::string outFileName = currentFileName + ".out";
-        handler.writeOutputFile(outFileName);
         end = std::chrono::steady_clock::now();
         std::cout << "Output file creation took "
                   << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << " us" << std::endl

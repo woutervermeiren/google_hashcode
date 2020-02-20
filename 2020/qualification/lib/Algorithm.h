@@ -14,6 +14,10 @@ public:
 
     void run(std::vector<Library *> &libraries);
 
+    void run2(uInt D, std::vector<Library *> &libraries, uIntVector& bookScores, uIntVector& librariesToSignUp);
+
+    Library* getNextLibrary(std::vector<Library *>& librariesTmp);
+
     uInt metric;
 };
 
