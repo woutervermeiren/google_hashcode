@@ -56,7 +56,9 @@ Library* Algorithm::get_next_library(std::vector<Library *> &libraries, uInt day
             //metric = (book_score / lib.N )* ( lib.M / lib.T );
             //metric = lib.T * 0.2 + (lib.N / lib.M) * 0.8;
             //std::cout << "score: " << lib.book_score << std::endl;
-            float my_metric = (1.0*lib.book_score / lib.N ) * lib.M * (1.0 * (lib.N/lib.M) / (lib.T + lib.N*1.0/lib.M));
+            //float my_metric = (1.0*lib.book_score / lib.N ) * lib.M * (1.0 * (lib.N/lib.M) / (lib.T + lib.N*1.0/lib.M));
+            float my_metric = ( days_left_till_project_done - lib.T )*1.0 * ( 1.0*(lib.book_score * lib.M ) / lib.N);
+            //std::cout << "lib " << lib.id << " my_metric: " << my_metric << std::endl;
 
             //std::cout << "metric - my_metric : " << metric << " - " << my_metric << std::endl;
             if(my_metric > metric) {

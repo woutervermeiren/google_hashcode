@@ -57,33 +57,37 @@ bool FileHandler::parseInputFile(std::string fileName, uInt& B, uInt& L, uInt& D
 	return true;
 }
 
-bool FileHandler::writeOutputFile(std::string fileName, uIntVector& badlibrariesToSignUp, std::vector<Library*>& libraries) {
-	std::ofstream outFile;
-	outFile.open(fileName);
+bool FileHandler::writeOutputFile(std::string fileName, uIntVector& librariesToSignUp, std::vector<Library*>& libraries, uIntVector& bookScores) {
+std::ofstream outFile;
+outFile.open(fileName);
 
-    uIntVector librariesToSignUp;
-    for (uInt i = 0; i < badlibrariesToSignUp.size(); ++i) {
-        uInt id = badlibrariesToSignUp[i];
-        if(libraries[id]->bookIdsToScan.empty()) {
-            continue;
-        }
-        librariesToSignUp.push_back(id);
-    }
+uInt nbWithoutBooks = 0;
+for (uInt i = 0; i < librariesToSignUp.size(); ++i) {
+uInt id = librariesToSignUp[i];
+if (libraries[id]->bookIdsToScan.size() == 0) {
+++nbWithoutBooks;
+continue;
+}
+}
 
-	outFile << librariesToSignUp.size() << "\n";
+outFile << librariesToSignUp.size() - nbWithoutBooks << "\n";
 
-	for (uInt i = 0; i < librariesToSignUp.size(); ++i) {
-		uInt id = librariesToSignUp[i];
-		if (libraries[id]->bookIdsToScan.size() == 0) {
-			continue;
-		}
-		outFile << id << " " << libraries[id]->bookIdsToScan.size() << "\n";
 
-		for (uInt j = 0; j < libraries[id]->bookIdsToScan.size(); ++j) {
-			outFile << libraries[id]->bookIdsToScan[j] << " ";
-		}
-		outFile << "\n";
-	}
+uInt totalScore = 0;
+for (uInt i = 0; i < librariesToSignUp.size(); ++i) {
+uInt id = librariesToSignUp[i];
+if (libraries[id]->bookIdsToScan.size() == 0) {
+continue;
+}
+outFile << id << " " << libraries[id]->bookIdsToScan.size() << "\n";
 
-	return true;
+for (uInt j = 0; j < libraries[id]->bookIdsToScan.size(); ++j) {
+outFile << libraries[id]->bookIdsToScan[j] << " ";
+totalScore += bookScores[libraries[id]->bookIdsToScan[j]];
+}
+outFile << "\n";
+}
+std::cout << "Total score = " << totalScore << std::endl;
+
+return true;
 }
