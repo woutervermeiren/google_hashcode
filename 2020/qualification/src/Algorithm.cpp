@@ -34,18 +34,20 @@ Library* Algorithm::get_next_library(std::vector<Library *> &libraries, uInt day
     Library* lib = nullptr;
     uInt index = 0;
 
+    //std::cout << "selecting next library" << std::endl;
+
     // just get first todo library
     while(index != libraries.size()) {
         if(!libraries[index]->already_shipping) {
             lib = libraries[index];
-            index++;
             break;
         }
         index++;
     }
 
-    uInt metric = 0;
-    uInt next_lib = 0;
+    //std::cout << "first todo: " << index << std::endl;
+    float metric = 0;
+
     for(uInt i = 0; i != libraries.size(); ++i) {
         Library &lib = *libraries[i];
 
@@ -53,22 +55,26 @@ Library* Algorithm::get_next_library(std::vector<Library *> &libraries, uInt day
 
             //metric = (book_score / lib.N )* ( lib.M / lib.T );
             //metric = lib.T * 0.2 + (lib.N / lib.M) * 0.8;
-            uInt my_metric = (lib.book_score / lib.N ) * lib.M * ((lib.N/lib.M) / (lib.T + lib.N/lib.M));
+            //std::cout << "score: " << lib.book_score << std::endl;
+            float my_metric = (1.0*lib.book_score / lib.N ) * lib.M * (1.0 * (lib.N/lib.M) / (lib.T + lib.N*1.0/lib.M));
 
+            //std::cout << "metric - my_metric : " << metric << " - " << my_metric << std::endl;
             if(my_metric > metric) {
-                next_lib = index;
                 metric = my_metric;
+                index = i;
             }
         }
     }
+    //std::cout << "library selected: " << index << libraries[index]->book_score <<  std::endl;;
 
     return libraries[index];
 }
 
 void Algorithm::calculate_book_scores(std::vector<Library *> &libraries, uIntVector &book_scores) {
+    //std::cout << "book scores " << libraries.size() << " " << book_scores.size() << std::endl;
     for (int i = 0; i != libraries.size(); ++i) {
-        this->m_threadpool.push([&](int library_idx) {
-            Library &lib = *libraries[library_idx];
+        //this->m_threadpool.push([&](int library_idx) {
+            Library &lib = *libraries[i];
             metric = lib.N * lib.M / lib.T;
 
             // Calculate book score
@@ -77,10 +83,11 @@ void Algorithm::calculate_book_scores(std::vector<Library *> &libraries, uIntVec
             });
 
             lib.book_score = sum_of_book_scores;
-        });
+            //std::cout << "lib: " << lib.id << " : " << lib.book_score << std::endl;
+        //});
     }
 
-    this->m_threadpool.stop(true);
+    //this->m_threadpool.stop(true);
 }
 
 void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& bookScores, uIntVector& librariesToSignUp) {
@@ -109,10 +116,12 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 	Library* nextLib = NULL;
 	// Only add book once signed up!
 	while (day < D) {
-		std::cout << "day " << day << "/" << D << std::endl;
 		if (signupTime == 0) {
+            calculate_book_scores(libraries, bookScores);
 			if (nextLib != NULL) {
 				librariesToSignUp.push_back(nextLib->id);
+                std::cout << "day " << day << "/" << D << " -> lib " << nextLib->id << std::endl;
+                nextLib->already_shipping = true;
 			}
 		}
 		for (uInt i = 0; i < librariesToSignUp.size(); ++i) {
@@ -148,7 +157,9 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 
 
 		// Select new library to add;
-		nextLib = getNextLibrary(librariesTmp);
+        //nextLib = getNextLibrary(librariesTmp);
+        nextLib = get_next_library(libraries, D - day);
+        librariesTmp = libraries;
 		if (nextLib == NULL) { // FINISHED
 			break;
 		}

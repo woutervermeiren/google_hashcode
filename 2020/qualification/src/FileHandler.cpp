@@ -57,9 +57,19 @@ bool FileHandler::parseInputFile(std::string fileName, uInt& B, uInt& L, uInt& D
 	return true;
 }
 
-bool FileHandler::writeOutputFile(std::string fileName, uIntVector& librariesToSignUp, std::vector<Library*>& libraries) {
+bool FileHandler::writeOutputFile(std::string fileName, uIntVector& badlibrariesToSignUp, std::vector<Library*>& libraries) {
 	std::ofstream outFile;
 	outFile.open(fileName);
+
+    uIntVector librariesToSignUp;
+    for (uInt i = 0; i < badlibrariesToSignUp.size(); ++i) {
+        uInt id = badlibrariesToSignUp[i];
+        if(libraries[id]->bookIdsToScan.empty()) {
+            continue;
+        }
+        librariesToSignUp.push_back(id);
+    }
+
 	outFile << librariesToSignUp.size() << "\n";
 
 	for (uInt i = 0; i < librariesToSignUp.size(); ++i) {
