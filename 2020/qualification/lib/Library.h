@@ -10,6 +10,8 @@ class Library
 public:
 	Library(uInt _id, uInt _numBooks, uInt _time, uInt _shippable);
 
+    uInt get_book_score() { return 5; }
+
     virtual ~Library() {}
 
     uInt id;

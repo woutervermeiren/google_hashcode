@@ -10,13 +10,20 @@
 class Algorithm
 {
 public:
-    Algorithm() {}
+    Algorithm() : metric(0), today(0), days_till_signup_done(0), library_count(0) {}
     virtual ~Algorithm() {}
 
     void run(std::vector<Library *> &libraries, uIntVector &book_scores);
 
     uInt metric;
     ctpl::thread_pool m_threadpool;
+
+    void run(std::vector<Library *> &libraries);
+    Library* get_next_library(std::vector<Library *> &libraries);
+
+    uInt today;
+    uInt days_till_signup_done;
+    uInt library_count;
 };
 
 #endif
