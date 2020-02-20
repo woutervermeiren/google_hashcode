@@ -23,6 +23,8 @@ public:
     // Book processing rate per day
     uInt M;
 
+    uInt book_score;
+
     uIntVector bookIds;
 
     uIntVector bookIdsToScan;

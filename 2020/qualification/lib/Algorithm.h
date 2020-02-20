@@ -13,7 +13,7 @@ public:
     Algorithm() : metric(0), today(0), days_till_signup_done(0), library_count(0) {}
     virtual ~Algorithm() {}
 
-    void run(std::vector<Library *> &libraries, uIntVector &book_scores, uInt D);
+    void run(std::vector<Library *> &libraries, uIntVector &book_scores, uInt D, uIntVector& librariesToSignUp);
 
     void run2(uInt D, std::vector<Library *> &libraries, uIntVector& bookScores, uIntVector& librariesToSignUp);
 
@@ -24,7 +24,7 @@ public:
 
     void run(std::vector<Library *> &libraries);
     Library* get_next_library(std::vector<Library *> &libraries, uInt days_left_till_project_done);
-    void calculate_book_scores(uIntVector & library_results, std::vector<Library *> &libraries, uIntVector &book_scores);
+    void calculate_book_scores(std::vector<Library *> &libraries, uIntVector &book_scores);
 
     uInt today;
     uInt days_till_signup_done;

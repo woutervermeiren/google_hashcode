@@ -3,9 +3,10 @@
 #include <numeric>
 #include <thread>
 #include <chrono>
+#include <algorithm>
 using namespace std::chrono_literals;
 
-void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores, uInt D)
+void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores, uInt D, uIntVector& librariesToSignUp)
 {
     library_count = libraries.size();
 
@@ -14,16 +15,19 @@ void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores, 
         // select next library that can start sending books
         Library* lib = nullptr;
         if(days_till_signup_done == 0) {
-            uIntVector library_results(libraries.size());
-            calculate_book_scores(library_results, libraries, book_scores);
+            calculate_book_scores(libraries, book_scores);
 
             lib = get_next_library(libraries, D - today);
             days_till_signup_done = lib->M;
+
+            librariesToSignUp.push_back(lib->id);
         }
 
         days_till_signup_done--;
         today++;
     }
+
+
 }
 
 Library* Algorithm::get_next_library(std::vector<Library *> &libraries, uInt days_left_till_project_done) {
@@ -47,15 +51,13 @@ Library* Algorithm::get_next_library(std::vector<Library *> &libraries, uInt day
 
         if(i!=index && !libraries[i]->already_shipping && days_left_till_project_done > lib.M) {
 
-            // calculate book score
-            uInt book_score = lib.get_book_score();
-
             //metric = (book_score / lib.N )* ( lib.M / lib.T );
             //metric = lib.T * 0.2 + (lib.N / lib.M) * 0.8;
-            uInt my_metric = (book_score / lib.N ) * lib.M * ((lib.N/lib.M) / (lib.T + lib.N/lib.M));
+            uInt my_metric = (lib.book_score / lib.N ) * lib.M * ((lib.N/lib.M) / (lib.T + lib.N/lib.M));
 
             if(my_metric > metric) {
                 next_lib = index;
+                metric = my_metric;
             }
         }
     }
@@ -63,7 +65,7 @@ Library* Algorithm::get_next_library(std::vector<Library *> &libraries, uInt day
     return libraries[index];
 }
 
-void Algorithm::calculate_book_scores(uIntVector & library_results, std::vector<Library *> &libraries, uIntVector &book_scores) {
+void Algorithm::calculate_book_scores(std::vector<Library *> &libraries, uIntVector &book_scores) {
     for (int i = 0; i != libraries.size(); ++i) {
         this->m_threadpool.push([&](int library_idx) {
             Library &lib = *libraries[library_idx];
@@ -74,7 +76,7 @@ void Algorithm::calculate_book_scores(uIntVector & library_results, std::vector<
                 return acc + book_scores[book_idx];
             });
 
-            library_results[library_idx] = sum_of_book_scores;
+            lib.book_score = sum_of_book_scores;
         });
     }
 
