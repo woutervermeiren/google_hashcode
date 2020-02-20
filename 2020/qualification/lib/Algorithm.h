@@ -18,6 +18,7 @@ public:
     void run2(uInt D, std::vector<Library *> &libraries, uIntVector& bookScores, uIntVector& librariesToSignUp);
 
     Library* getNextLibrary(std::vector<Library *>& librariesTmp);
+    Library* getNextLibrary2(std::vector<Library *>& librariesTmp, uInt daysLeft, std::vector<bool>& bookUsed);
 
     uInt metric;
     ctpl::thread_pool m_threadpool;

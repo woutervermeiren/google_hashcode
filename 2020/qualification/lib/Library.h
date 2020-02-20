@@ -14,6 +14,8 @@ public:
 
     virtual ~Library() {}
 
+    void sort();
+
     uInt id;
 
     // Book count
@@ -25,7 +27,7 @@ public:
 
     uInt book_score;
 
-    uIntVector bookIds;
+    uIntPairVector bookIds;
 
     uIntVector bookIdsToScan;
 

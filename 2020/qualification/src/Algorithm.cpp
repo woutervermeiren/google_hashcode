@@ -81,7 +81,7 @@ void Algorithm::calculate_book_scores(std::vector<Library *> &libraries, uIntVec
 
             // Calculate book score
             const auto sum_of_book_scores = std::accumulate(lib.bookIds.begin(), lib.bookIds.end(), 0, [&](auto acc, auto book_idx) {
-                return acc + book_scores[book_idx];
+                return acc + book_idx.second;
             });
 
             lib.book_score = sum_of_book_scores;
@@ -89,7 +89,7 @@ void Algorithm::calculate_book_scores(std::vector<Library *> &libraries, uIntVec
         //});
     }
 
-    //this->m_threadpool.stop(true);
+    this->m_threadpool.stop(true);
 }
 
 void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& bookScores, uIntVector& librariesToSignUp) {
@@ -118,6 +118,7 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 	Library* nextLib = NULL;
 	// Only add book once signed up!
 	while (day < D) {
+		//std::cout << "day " << day << "/" << D << std::endl;
 		if (signupTime == 0) {
             calculate_book_scores(libraries, bookScores);
 			if (nextLib != NULL) {
@@ -130,13 +131,17 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 			Library* lib = libraries[librariesToSignUp[i]];
 			uInt id = lib->id;
 
+			if (lastUsedBookIndex[id] >= lib->bookIds.size()) { // Library finished
+				continue;
+			}
+
 			uInt booksPerDay = lib->T;
 			for (int j = 0; j < booksPerDay; ++j) {
 				uInt nextBookIndex = lastUsedBookIndex[id];
 				if (nextBookIndex >= lib->bookIds.size()) { // Library finished
 					continue;
 				}
-				uInt bookId = lib->bookIds[nextBookIndex];
+				uInt bookId = lib->bookIds[nextBookIndex].first;
 
 				++lastUsedBookIndex[id];
 
@@ -159,9 +164,9 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 
 
 		// Select new library to add;
-        //nextLib = getNextLibrary(librariesTmp);
-        nextLib = get_next_library(libraries, D - day);
-        librariesTmp = libraries;
+        nextLib = getNextLibrary(librariesTmp);
+        //nextLib = get_next_library(libraries, D - day);
+        //librariesTmp = libraries;
 		if (nextLib == NULL) { // FINISHED
 			break;
 		}
@@ -188,7 +193,10 @@ Library* Algorithm::getNextLibrary(std::vector<Library *>& librariesTmp) {
 
 	for (uInt i = 0; i < librariesTmp.size(); ++i) {
 		Library* lib = librariesTmp[i];
-		if (lib->M <= bestSignUp && lib->T >= ratePerDay) {
+		if (lib->M <= bestSignUp) {
+			if (lib->M >= bestSignUp && lib->T > ratePerDay) {
+				continue;
+			}
 			libReturn = lib;
 			bestSignUp = lib->M;
 			ratePerDay = lib->T;
@@ -197,3 +205,70 @@ Library* Algorithm::getNextLibrary(std::vector<Library *>& librariesTmp) {
 
 	return libReturn;
 }
+
+Library* Algorithm::getNextLibrary2(std::vector<Library *>& librariesTmp, uInt daysLeft, std::vector<bool>& bookUsed) {
+	Library* libReturn = NULL;
+
+	uInt bestScore = 0;
+
+	uInt bestSignUp = 0xFFFFFFF;
+
+	for (uInt i = 0; i < librariesTmp.size(); ++i) {
+		Library* lib = librariesTmp[i];
+		uInt score = 0;
+		for (uInt j = 0; j < lib->bookIds.size(); ++j) {
+			score += lib->bookIds[j].second;
+		}
+		if (score > bestScore) {
+			bestScore = score;
+			libReturn = lib;
+		}
+
+		if (lib->M <= bestSignUp) {
+			bestSignUp = lib->M;
+		}
+	}
+
+	return libReturn;
+}
+
+/*Library* Algorithm::getNextLibrary2(std::vector<Library *>& librariesTmp, uInt daysLeft, std::vector<bool>& bookUsed) {
+	Library* libReturn = NULL;
+
+	uInt bestScore;
+
+	for (uInt i = 0; i < librariesTmp.size(); ++i) {
+		Library* lib = librariesTmp[i];
+		uInt signUpTime = lib->T;
+
+		int booksToAdd = daysLeft - signUpTime;
+
+		if (booksToAdd <= 0) {
+			continue;
+		}
+		uInt score = 0;
+
+		uInt index = 0;
+		for (int j = 0; j < booksToAdd; ++j) {
+			if (index >= lib->bookIds.size()) {
+				break;
+			}
+			uInt bookId = lib->bookIds[index].first;
+			if (bookUsed[bookId] == true) {
+				--j;
+				++index;
+				continue;
+			}
+			score += lib->bookIds[index].second;
+
+			if (score > bestScore) {
+				bestScore = score;
+				libReturn = lib;
+			}
+			++index;
+		}
+	}
+
+	std::cout << libReturn << std::endl;
+	return libReturn;
+}*/

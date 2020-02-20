@@ -6,6 +6,7 @@
 
 typedef unsigned int uInt;
 typedef std::vector<unsigned int> uIntVector;
+typedef std::vector< std::pair<unsigned int, unsigned int> > uIntPairVector;
 typedef std::vector<std::string> stringVector;
 
 #endif

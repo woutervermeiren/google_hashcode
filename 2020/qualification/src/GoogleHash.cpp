@@ -10,13 +10,12 @@ using namespace std;
 int main()
 {
     stringVector fileNames;
-    //fileNames.push_back("a_example.txt");
-    //fileNames.push_back("b_read_on.txt");
-
+    fileNames.push_back("a_example.txt");
+    fileNames.push_back("b_read_on.txt");
+    fileNames.push_back("c_incunabula.txt");
     fileNames.push_back("d_tough_choices.txt");
-    //fileNames.push_back("c_incunabula.txt");
-    //fileNames.push_back("e_so_many_books.txt");
-    //fileNames.push_back("f_libraries_of_the_world.txt");
+    fileNames.push_back("e_so_many_books.txt");
+    fileNames.push_back("f_libraries_of_the_world.txt");
 
     FileHandler handler;
     Algorithm algorithm;
