@@ -7,7 +7,7 @@ Library::Library(uInt _id, uInt _numBooks, uInt _time, uInt _shippable)
     , N(_numBooks)
     , M(_time)
     , T(_shippable)
-    , done(false)
+    , already_shipping(false)
 {
     bookIds.reserve(N);
 }

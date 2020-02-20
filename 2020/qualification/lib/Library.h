@@ -26,6 +26,8 @@ public:
     uIntVector bookIds;
 
     uIntVector bookIdsToScan;
+
+    bool already_shipping;
 };
 
 #endif

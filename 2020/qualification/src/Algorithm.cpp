@@ -34,6 +34,7 @@ void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores)
         }
 
         days_till_signup_done--;
+        today++;
     }
 }
 
