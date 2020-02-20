@@ -10,10 +10,10 @@ using namespace std;
 int main()
 {
     stringVector fileNames;
-    fileNames.push_back("a_example.txt");
-    fileNames.push_back("b_read_on.txt");
-    fileNames.push_back("c_incunabula.txt");
-    fileNames.push_back("d_tough_choices.txt");
+   //fileNames.push_back("a_example.txt");
+ //   fileNames.push_back("b_read_on.txt");
+  //  fileNames.push_back("c_incunabula.txt");
+  //  fileNames.push_back("d_tough_choices.txt");
     fileNames.push_back("f_libraries_of_the_world.txt");
 
     FileHandler handler;
@@ -39,11 +39,12 @@ int main()
         std::cout << "<<<<< Start file parsing: " << currentFileName << " >>>>>" << std::endl;
         handler.parseInputFile(currentFileName, B, L, D, bookScores, libraries);
 
+        std::cout << "B = " << B << " L " << L << " D " << D << std::endl;
         std::cout << "<<<<< Start algorithm execution >>>>>" << std::endl;
         begin = std::chrono::steady_clock::now();
 
         uIntVector librariesToSignUp;
-        algorithm.run(libraries, bookScores, D);
+        //algorithm.run(libraries, bookScores, D);
 
         algorithm.run2(D, libraries, bookScores, librariesToSignUp);
 

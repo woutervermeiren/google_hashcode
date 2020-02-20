@@ -82,6 +82,7 @@ void Algorithm::calculate_book_scores(uIntVector & library_results, std::vector<
 }
 
 void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& bookScores, uIntVector& librariesToSignUp) {
+	std::cout << "call run 2" << std::endl;
 	uInt day = 0;
 
 	std::vector<Library *> librariesTmp = libraries;
@@ -106,6 +107,7 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 	Library* nextLib = NULL;
 	// Only add book once signed up!
 	while (day < D) {
+		std::cout << "day " << day << "/" << D << std::endl;
 		if (signupTime == 0) {
 			if (nextLib != NULL) {
 				librariesToSignUp.push_back(nextLib->id);
@@ -114,10 +116,11 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 		for (uInt i = 0; i < librariesToSignUp.size(); ++i) {
 			Library* lib = libraries[librariesToSignUp[i]];
 			uInt id = lib->id;
+
 			uInt booksPerDay = lib->T;
 			for (int j = 0; j < booksPerDay; ++j) {
 				uInt nextBookIndex = lastUsedBookIndex[id];
-				if (nextBookIndex > lib->bookIds.size()) { // Library finished
+				if (nextBookIndex >= lib->bookIds.size()) { // Library finished
 					continue;
 				}
 				uInt bookId = lib->bookIds[nextBookIndex];
