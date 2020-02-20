@@ -119,6 +119,10 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 			Library* lib = libraries[librariesToSignUp[i]];
 			uInt id = lib->id;
 
+			if (lastUsedBookIndex[id] >= lib->bookIds.size()) { // Library finished
+				continue;
+			}
+
 			uInt booksPerDay = lib->T;
 			for (int j = 0; j < booksPerDay; ++j) {
 				uInt nextBookIndex = lastUsedBookIndex[id];
