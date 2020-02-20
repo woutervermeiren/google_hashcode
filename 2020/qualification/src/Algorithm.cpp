@@ -29,7 +29,7 @@ void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores)
 
     while(today < D && library_count != 0) {
         if(days_till_signup_done == 0) {
-            Library* lib = get_next_library(libraries);
+            Library* lib = get_next_library(libraries, D - today);
             days_till_signup_done = lib->M;
         }
 
@@ -38,7 +38,7 @@ void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores)
     }
 }
 
-Library* Algorithm::get_next_library(std::vector<Library *> &libraries) {
+Library* Algorithm::get_next_library(std::vector<Library *> &libraries, uInt days_left_till_project_done) {
     Library* lib = nullptr;
     uInt index = 0;
 
@@ -55,15 +55,16 @@ Library* Algorithm::get_next_library(std::vector<Library *> &libraries) {
     uInt metric = 0;
     uInt next_lib = 0;
     for(uInt i = 0; i != libraries.size(); ++i) {
-        if(i!=index && !libraries[i]->already_shipping) {
-            Library &lib = *libraries[i];
+        Library &lib = *libraries[i];
+
+        if(i!=index && !libraries[i]->already_shipping && days_left_till_project_done > lib.M) {
 
             // calculate book score
             uInt book_score = lib.get_book_score();
 
             //metric = (book_score / lib.N )* ( lib.M / lib.T );
             //metric = lib.T * 0.2 + (lib.N / lib.M) * 0.8;
-            uInt my_metric = (book_score / lib.N ) * lib.M * ( (lib.T + lib.N/lib.M))/(lib.N/lib.M);
+            uInt my_metric = (book_score / lib.N ) * lib.M * ((lib.N/lib.M) / (lib.T + lib.N/lib.M));
 
             if(my_metric > metric) {
                 next_lib = index;

@@ -19,7 +19,7 @@ public:
     ctpl::thread_pool m_threadpool;
 
     void run(std::vector<Library *> &libraries);
-    Library* get_next_library(std::vector<Library *> &libraries);
+    Library* get_next_library(std::vector<Library *> &libraries, uInt days_left_till_project_done);
 
     uInt today;
     uInt days_till_signup_done;
