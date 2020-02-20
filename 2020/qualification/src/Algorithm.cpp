@@ -152,7 +152,7 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 
 
 		// Select new library to add;
-		nextLib = getNextLibrary(librariesTmp);
+		nextLib = getNextLibrary2(librariesTmp, D-day, bookUsed);
 		if (nextLib == NULL) { // FINISHED
 			break;
 		}
@@ -186,5 +186,48 @@ Library* Algorithm::getNextLibrary(std::vector<Library *>& librariesTmp) {
 		}
 	}
 
+	return libReturn;
+}
+
+Library* Algorithm::getNextLibrary2(std::vector<Library *>& librariesTmp, uInt daysLeft, std::vector<bool>& bookUsed) {
+	Library* libReturn = NULL;
+
+	uInt bestScore;
+
+	std::vector<bool> bookUsedTmp = bookUsed;
+
+	for (uInt i = 0; i < librariesTmp.size(); ++i) {
+		Library* lib = librariesTmp[i];
+		uInt signUpTime = lib->T;
+
+		int booksToAdd = daysLeft - signUpTime;
+
+		if (booksToAdd <= 0) {
+			continue;
+		}
+		uInt score = 0;
+
+		uInt index = 0;
+		for (int j = 0; j < booksToAdd; ++j) {
+			if (index >= lib->bookIds.size()) {
+				break;
+			}
+			uInt bookId = lib->bookIds[index].first;
+			if (bookUsed[bookId] == true) {
+				--j;
+				++index;
+				continue;
+			}
+			score += lib->bookIds[index].second;
+
+			if (score > bestScore) {
+				bestScore = score;
+				libReturn = lib;
+			}
+			++index;
+		}
+	}
+
+	std::cout << libReturn << std::endl;
 	return libReturn;
 }
