@@ -1,16 +1,20 @@
 #ifndef ALGORITHM_H
 #define ALGORITHM_H
 
-#include <vector>
-#include <string>
 #include "Defines.h"
+#include "Library.h"
+#include <string>
+#include <vector>
 
-class Algorithm {
+class Algorithm
+{
 public:
-	Algorithm() {}
+    Algorithm() {}
     virtual ~Algorithm() {}
 
-    void run();
+    void run(std::vector<Library *> &libraries);
+
+    uInt metric;
 };
 
 #endif
