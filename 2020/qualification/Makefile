@@ -8,10 +8,10 @@ LDIR=lib
 
 LIBS=-lm
 
-_DEPS = FileHandler.h Algorithm.h Defines.h
+_DEPS = FileHandler.h Algorithm.h Defines.h Library.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = GoogleHash.o FileHandler.o Algorithm.o
+_OBJ = GoogleHash.o FileHandler.o Algorithm.o Library.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 

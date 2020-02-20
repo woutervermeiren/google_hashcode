@@ -10,7 +10,9 @@ add_executable(qualification
         lib/Algorithm.h
         lib/Defines.h
         lib/FileHandler.h
+	lib/Library.h
         src/Algorithm.cpp
         src/FileHandler.cpp
         src/GoogleHash.cpp
+	src/Library.cpp
         Makefile)
