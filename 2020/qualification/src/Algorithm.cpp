@@ -11,12 +11,12 @@ void Algorithm::run(std::vector<Library *> &libraries, uIntVector &book_scores, 
 
     // now step through days
     while(today < D && library_count != 0) {
-        uIntVector library_results(libraries.size());
-        calculate_book_scores(library_results, libraries, book_scores);
-
         // select next library that can start sending books
         Library* lib = nullptr;
         if(days_till_signup_done == 0) {
+            uIntVector library_results(libraries.size());
+            calculate_book_scores(library_results, libraries, book_scores);
+
             lib = get_next_library(libraries, D - today);
             days_till_signup_done = lib->M;
         }
