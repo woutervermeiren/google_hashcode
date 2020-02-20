@@ -43,7 +43,7 @@ int main()
         begin = std::chrono::steady_clock::now();
 
         uIntVector librariesToSignUp;
-        algorithm.run(libraries);
+        algorithm.run(libraries, bookScores);
 
         end = std::chrono::steady_clock::now();
         std::cout << "Algorithm execution took "

@@ -14,8 +14,11 @@ public:
 
     uInt id;
 
+    // Book count
     uInt N;
+    // Startup time
     uInt T;
+    // Book processing rate per day
     uInt M;
 
     uIntVector bookIds;
