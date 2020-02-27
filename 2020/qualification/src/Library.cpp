@@ -1,5 +1,6 @@
 #include "../lib/Library.h"
 #include <iostream>
+#include <algorithm>
 
 
 Library::Library(uInt _id, uInt _numBooks, uInt _time, uInt _shippable)

@@ -90,5 +90,5 @@ bool FileHandler::writeOutputFile(std::string fileName, uIntVector& librariesToS
 	}
 	std::cout << "Total score = " << totalScore << std::endl;
 
-	return true;
+    return true;
 }
