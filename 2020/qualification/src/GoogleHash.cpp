@@ -46,7 +46,7 @@ int main()
 
         uIntVector librariesToSignUp;
 
-        algorithm.run2(D, libraries, bookScores, librariesToSignUp);
+        algorithm.run(D, libraries, bookScores, librariesToSignUp);
 
         end = std::chrono::steady_clock::now();
         std::cout << "Algorithm execution took "
