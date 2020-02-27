@@ -20,6 +20,7 @@ public:
     Library* getNextLibrary(std::vector<Library *>& librariesTmp);
     Library* getNextLibrary2(std::vector<Library *>& librariesTmp, uInt daysLeft, std::vector<bool>& bookUsed);
     Library* getNextLibrary3(std::vector<Library *>& librariesTmp, uInt daysLeft, std::vector<bool>& bookUsed);
+    void addBooksThatWillBeUsed(std::vector<bool>& bookWillBeUsed, uInt daysLeft, Library* nextLib);
 
     uInt metric;
     ctpl::thread_pool m_threadpool;

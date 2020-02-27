@@ -89,10 +89,13 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 	std::vector<Library *> librariesTmp = libraries;
 
 	std::vector<bool> bookUsed;
+	std::vector<bool> bookWillBeUsed;
 	bookUsed.reserve(bookScores.size());
+	bookWillBeUsed.reserve(bookScores.size());
 
 	for (uInt i = 0; i < bookScores.size(); ++i) {
 		bookUsed.push_back(false);
+		bookWillBeUsed.push_back(false);
 	}
 
 	uInt signupTime = 0;
@@ -112,6 +115,7 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 		if (signupTime == 0) {
 			if (nextLib != NULL) {
 				librariesToSignUp.push_back(nextLib->id);
+				addBooksThatWillBeUsed(bookWillBeUsed, D-day, nextLib);
 			}
 		}
 		for (uInt i = 0; i < librariesToSignUp.size(); ++i) {
@@ -152,8 +156,14 @@ void Algorithm::run2(uInt D, std::vector<Library *> &libraries, uIntVector& book
 
 		// Select new library to add;
 		//nextLib = getNextLibrary2(librariesTmp, D-day, bookUsed);
-		nextLib = getNextLibrary2(librariesTmp, D-day, bookUsed);
-		//nextLib = getNextLibrary(librariesTmp);
+		//nextLib = getNextLibrary2(librariesTmp, D-day, bookWillBeUsed);
+
+		if (day < 0) {
+			nextLib = getNextLibrary(librariesTmp);
+		}
+		else {
+			nextLib = getNextLibrary2(librariesTmp, D-day, bookWillBeUsed);
+		}
 
 		if (nextLib == NULL) { // FINISHED
 			++day;
@@ -183,7 +193,7 @@ Library* Algorithm::getNextLibrary(std::vector<Library *>& librariesTmp) {
 
 	for (uInt i = 0; i < librariesTmp.size(); ++i) {
 		Library* lib = librariesTmp[i];
-		if (lib->T >= ratePerDay) {
+		if (lib->M <= bestSignUp) {
 			libReturn = lib;
 			bestSignUp = lib->M;
 			ratePerDay = lib->T;
@@ -203,8 +213,61 @@ Library* Algorithm::getNextLibrary2(std::vector<Library *>& librariesTmp, uInt d
 		Library* lib = librariesTmp[i];
 		uInt signUpTime = lib->M;
 
+		//std::cout << "M = " << lib->M << " T = " << lib->T << std::endl;
+
 		int booksToAdd = daysLeft - signUpTime;
 
+		booksToAdd *= lib->T;
+
+		if (booksToAdd <= 0) {
+			continue;
+		}
+		uInt score = 0;
+
+		uInt index = 0;
+		for (int j = 0; j < booksToAdd; ++j) {
+			if (index >= lib->bookIds.size()) {
+				break;
+			}
+			uInt bookId = lib->bookIds[index].first;
+			if (bookUsed[bookId] == true) {
+				--j;
+				++index;
+				continue;
+			}
+			score += lib->bookIds[index].second;
+
+			++index;
+		}
+
+		score /= lib->M;
+		if (score > bestScore) {
+			bestScore = score;
+			libReturn = lib;
+		}
+	}
+
+
+	return libReturn;
+}
+
+
+Library* Algorithm::getNextLibrary3(std::vector<Library *>& librariesTmp, uInt daysLeft, std::vector<bool>& bookUsed) {
+	Library* libReturn = NULL;
+
+	uInt bestScore = 0;
+
+	for (uInt i = 0; i < librariesTmp.size(); ++i) {
+		Library* lib = librariesTmp[i];
+		uInt signUpTime = lib->M;
+
+		//std::cout << "M = " << lib->M << " T = " << lib->T << std::endl;
+
+		int booksToAdd = daysLeft - signUpTime;
+
+		booksToAdd /= lib->M;
+
+		//std::cout << "booksToAdd = " << booksToAdd << std::endl;
 		if (booksToAdd <= 0) {
 			continue;
 		}
@@ -235,43 +298,22 @@ Library* Algorithm::getNextLibrary2(std::vector<Library *>& librariesTmp, uInt d
 	return libReturn;
 }
 
-Library* Algorithm::getNextLibrary3(std::vector<Library *>& librariesTmp, uInt daysLeft, std::vector<bool>& bookUsed) {
-	Library* libReturn = NULL;
+void Algorithm::addBooksThatWillBeUsed(std::vector<bool>& bookWillBeUsed, uInt daysLeft, Library* lib) {
+	uInt index = 0;
+	for (uInt i = 0; i < daysLeft * lib->T; ++i) {
+		if (index >= lib->bookIds.size()) {
+			break;
+		}
 
-	uInt bestScore = 0;
-
-	for (uInt i = 0; i < librariesTmp.size(); ++i) {
-		Library* lib = librariesTmp[i];
-		uInt signUpTime = lib->M;
-
-		int booksToAdd = daysLeft - signUpTime;
-
-		if (booksToAdd <= 0) {
+		uInt bookId = lib->bookIds[index].first;
+		if (bookWillBeUsed[bookId] == true) {
+			--i;
+			++index;
 			continue;
 		}
-		uInt score = 0;
+		bookWillBeUsed[bookId] = true;
 
-		uInt index = 0;
-		for (int j = 0; j < booksToAdd; ++j) {
-			if (index >= lib->bookIds.size()) {
-				break;
-			}
-			uInt bookId = lib->bookIds[index].first;
-			if (bookUsed[bookId] == true) {
-				--j;
-				++index;
-				continue;
-			}
-			score += lib->bookIds[index].second;
-
-			if (score > bestScore) {
-				bestScore = score;
-				libReturn = lib;
-			}
-			++index;
-		}
+		//std::cout << "lib: " << lib->id << " bookId " << bookId << " is added" << std::endl;
+		++index;
 	}
-
-
-	return libReturn;
 }
